@@ -21,7 +21,7 @@
 /**
  * DSI gets called hourly
  */
-$GLOBALS['TL_CRON']['daily'][]  = array('DeferredSearchIndex', 'run');
+$GLOBALS['TL_CRON']['hourly'][]  = array('DeferredSearchIndex', 'run');
 
 /**
  * Set default values
