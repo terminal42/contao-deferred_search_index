@@ -21,7 +21,7 @@
 /**
  * Add to palette
  */
-$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] = str_replace(';{backend_legend}', ';{dsi_legend},dsi_ppc,dsi_cf;{backend_legend}', $GLOBALS['TL_DCA']['tl_settings']['palettes']['default']);
+$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] = str_replace('indexProtected', 'indexProtected,dsi_ppc,dsi_cf', $GLOBALS['TL_DCA']['tl_settings']['palettes']['default']);
 
 
 /**
