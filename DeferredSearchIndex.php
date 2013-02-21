@@ -23,7 +23,7 @@
  */
 class DeferredSearchIndex extends Backend
 {
-	
+
 	/**
 	 * Current object instance (Singleton)
 	 * @var object
@@ -47,16 +47,16 @@ class DeferredSearchIndex extends Backend
 	 */
 	public function run()
 	{
-		// abort if dsi isn't activated or if the X-Contao-DSI HTTP header is set because then this page gets called from the DSI itself and this prevents looping
-		if (!$GLOBALS['TL_CONFIG']['dsi_activate'] || $_SERVER['HTTP_X_CONTAO_DSI'])
+		// abort if the X-Contao-DSI HTTP header is set because then this page gets called from the DSI itself and this prevents looping
+		if ($_SERVER['HTTP_X_CONTAO_DSI'])
 		{
 			return;
 		}
-		
+
 		// try to get the last item we have indexed
 		$this->import('Database');
 		$objLastIndex = $this->Database->query("SELECT id FROM tl_dsi WHERE lastIndex=1");
-		
+
 		if (!$objLastIndex->numRows && $this->needsUpdate())
 		{
 			$this->collectData();
@@ -67,8 +67,8 @@ class DeferredSearchIndex extends Backend
 			$this->continueIndexing($objLastIndex->id + 1, $GLOBALS['TL_CONFIG']['dsi_ppc']);
 		}
 	}
-	
-	
+
+
 	/**
 	 * Collects all the data and stores it into the database
 	 */
@@ -77,7 +77,7 @@ class DeferredSearchIndex extends Backend
 		// we collect new data so let's first truncate the table
 		$this->import('Database');
 		$this->Database->query('TRUNCATE TABLE tl_dsi');
-		
+
 		// get the searchable pages
 		$arrPages = $this->findSearchablePages();
 
@@ -100,26 +100,26 @@ class DeferredSearchIndex extends Backend
 				$arrPages = $this->$callback[0]->$callback[1]($arrPages);
 			}
 		}
-		
+
 		// prepare the bulk insert
 		$strValues = '';
-		
+
 		foreach($arrPages as $k => $strPageUrl)
 		{
 			$strValues .= '(\'' . $strPageUrl . '\'),';
-			
+
 			// save memory
 			unset($arrPages[$k]);
 		}
 
 		// remove the last "," - I guess this is faster than counting the elements and only add the comma if it's not the last element
 		$strValues = substr($strValues, 0, -1);
-		
+
 		// insert the data into the database
 		$this->Database->query('INSERT DELAYED INTO tl_dsi (url) VALUES ' . $strValues);
 	}
-	
-	
+
+
 	/**
 	 * Index the pages
 	 * @param integer the start id
@@ -128,45 +128,45 @@ class DeferredSearchIndex extends Backend
 	 */
 	private function continueIndexing($intStartId, $intNumberOfItems)
 	{
-		
+
 		// calculate the finish id
 		$intFinishId = $intStartId + $intNumberOfItems - 1;
-		
+
 		// get the page urls
 		$this->import('Database');
 		$objTotal = $this->Database->query('SELECT COUNT(id) AS total FROM tl_dsi');
 		$objPages = $this->Database->prepare('SELECT id,url FROM tl_dsi WHERE id>=? AND id<=?')->execute($intStartId, $intFinishId);
-		
+
 		$intLastId = 0;
-		
+
 		while($objPages->next())
 		{
 			// request the url
 			$objRequest = new Request();
 			$objRequest->setHeader('X-Contao-DSI', '1');
 			$objRequest->send($objPages->url);
-			
+
 			$intLastId = $objPages->id;
 		}
-		
+
 		// log
 		$this->log('DSI: Indexed URIs ' . $intStartId . ' to ' . $intLastId . ' of ' . $objTotal->total, __METHOD__, TL_CRON);
-		
+
 		// remove the current iterator
 		$this->Database->query("UPDATE tl_dsi SET lastindex='' WHERE lastIndex=1");
-		
-				
+
+
 		// now let's check if there are still urls to work on
 		$objMore = $this->Database->prepare('SELECT COUNT(id) AS hasMore FROM tl_dsi WHERE id<?')->execute($intLastId);
-		
+
 		if ($objMore->hasMore)
 		{
 			// update the last item
 			$this->Database->prepare('UPDATE tl_dsi SET lastIndex=? WHERE id=?')->execute(1, $intLastId);
 		}
 	}
-	
-	
+
+
 	/**
 	 * Compares the current time to the last time DSI ran
 	 * @return boolean
@@ -178,10 +178,10 @@ class DeferredSearchIndex extends Backend
 		{
 			return true;
 		}
-		
+
 		// otherwise we compare
 		$intRange = 0;
-		
+
 		switch ($GLOBALS['TL_CONFIG']['dsi_cf'])
 		{
 			case 'daily':
@@ -194,20 +194,20 @@ class DeferredSearchIndex extends Backend
 				$intRange = 2592000;
 				break;
 		}
-		
+
 		// compare the last run with the current time
 		$intDifference = time() - $GLOBALS['TL_CONFIG']['dsi_lastStart'];
-		
+
 		if ($intDifference >= $intRange)
 		{
 			$this->Config->update("\$GLOBALS['TL_CONFIG']['dsi_lastStart']", time());
 			return true;
 		}
-		
+
 		return false;
 	}
 
-	
+
 	/**
 	 * Return the current object instance (Singleton)
 	 * @return object

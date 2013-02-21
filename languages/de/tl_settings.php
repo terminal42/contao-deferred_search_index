@@ -25,7 +25,6 @@ $GLOBALS['TL_LANG']['tl_settings']['dsi_legend'] = 'Deferred Search Index';
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_settings']['dsi_activate']	= array('Den DSI aktivieren', 'Aktivieren Sie den DSI.');
 $GLOBALS['TL_LANG']['tl_settings']['dsi_ppc']		= array('Anzahl Seiten pro Aufruf', 'Beachten Sie <strong>unbedingt</strong> den Hilfetext!');
 $GLOBALS['TL_LANG']['tl_settings']['dsi_cf']		= array('Neuaufbau-Frequenz', 'Beachten Sie <strong>unbedingt</strong> den Hilfetext!');
 

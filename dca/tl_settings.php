@@ -21,26 +21,12 @@
 /**
  * Add to palette
  */
-$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] = str_replace(';{backend_legend}', ';{dsi_legend},dsi_activate;{backend_legend}', $GLOBALS['TL_DCA']['tl_settings']['palettes']['default']);
-$GLOBALS['TL_DCA']['tl_settings']['palettes']['__selector__'][] = 'dsi_activate';
-
-
-/**
- * Extend subpalette
- */
-$GLOBALS['TL_DCA']['tl_settings']['subpalettes']['dsi_activate'] = 'dsi_ppc,dsi_cf';
+$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] = str_replace(';{backend_legend}', ';{dsi_legend},dsi_ppc,dsi_cf;{backend_legend}', $GLOBALS['TL_DCA']['tl_settings']['palettes']['default']);
 
 
 /**
  * Add fields
  */
-$GLOBALS['TL_DCA']['tl_settings']['fields']['dsi_activate'] = array
-(
-	'label'			=> &$GLOBALS['TL_LANG']['tl_settings']['dsi_activate'],
-	'inputType'		=> 'checkbox',
-	'eval'      	=> array('tl_class'=>'clr', 'submitOnChange'=>true)
-);
-
 $GLOBALS['TL_DCA']['tl_settings']['fields']['dsi_ppc'] = array
 (
 	'label'			=> &$GLOBALS['TL_LANG']['tl_settings']['dsi_ppc'],
