@@ -48,7 +48,7 @@ class DeferredSearchIndex extends Backend
 	public function run()
 	{
 		// abort if the X-Contao-DSI HTTP header is set because then this page gets called from the DSI itself and this prevents looping
-		if ($_SERVER['HTTP_X_CONTAO_DSI'])
+		if (!$GLOBALS['TL_CONFIG']['enableSearch'] || $_SERVER['HTTP_X_CONTAO_DSI'])
 		{
 			return;
 		}
