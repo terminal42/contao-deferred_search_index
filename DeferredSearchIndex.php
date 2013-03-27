@@ -216,7 +216,7 @@ class DeferredSearchIndex extends Backend
 	{
 		if (!is_object(self::$objInstance))
 		{
-			self::$objInstance = new DeferredSearchIndexer();
+			self::$objInstance = new DeferredSearchIndex();
 		}
 
 		return self::$objInstance;
