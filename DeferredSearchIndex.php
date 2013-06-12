@@ -78,6 +78,10 @@ class DeferredSearchIndex extends Backend
 		$this->import('Database');
 		$this->Database->query('TRUNCATE TABLE tl_dsi');
 
+		// Delete all search indexes for pages no longer present in tl_page
+		$this->Database->query("DELETE FROM tl_search WHERE pid NOT IN (SELECT id FROM tl_page)");
+		$this->Database->query("DELETE FROM tl_search_index WHERE pid NOT IN (SELECT id FROM tl_search)");
+
 		// get the searchable pages
 		$arrPages = $this->findSearchablePages();
 
