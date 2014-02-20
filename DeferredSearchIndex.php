@@ -41,6 +41,20 @@ class DeferredSearchIndex extends Backend
      */
     final private function __clone() {}
 
+
+    /**
+     * Disable regular indexing routine for performance gain
+     * The DSI is now taking over indexing
+     */
+    public function disableRegularIndexer($objPage, $objLayout, $objPageRegular)
+    {
+        // Do not disable search if the DSI is requesting the page
+        if (!$_SERVER['HTTP_X_CONTAO_DSI']) {
+            $objPage->noSearch = 1;
+        }
+    }
+
+
     /**
      * Index the pages
      */

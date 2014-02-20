@@ -32,5 +32,5 @@
  */
 ClassLoader::addClasses(array
 (
-	'DeferredSearchIndex' => 'system/modules/deferred_search_index/DeferredSearchIndex.php',
+    'DeferredSearchIndex' => 'system/modules/deferred_search_index/DeferredSearchIndex.php',
 ));
