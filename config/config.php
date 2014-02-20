@@ -21,10 +21,10 @@
 /**
  * DSI gets called hourly
  */
-$GLOBALS['TL_CRON']['hourly'][]  = array('DeferredSearchIndex', 'run');
+$GLOBALS['TL_CRON']['hourly'][]     = array('DeferredSearchIndex', 'run');
 
 /**
  * Set default values
  */
-$GLOBALS['TL_CONFIG']['dsi_ppc']	= 100;
-$GLOBALS['TL_CONFIG']['dsi_cf']		= 'weekly';
+$GLOBALS['TL_CONFIG']['dsi_ppc']    = 20;
+$GLOBALS['TL_CONFIG']['dsi_cf']     = 'weekly';
