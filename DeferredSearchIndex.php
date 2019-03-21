@@ -105,7 +105,7 @@ class DeferredSearchIndex extends Backend
         if (isset($GLOBALS['TL_HOOKS']['dsi_searchablePages']) && is_array($GLOBALS['TL_HOOKS']['dsi_searchablePages'])) {
             foreach ($GLOBALS['TL_HOOKS']['dsi_searchablePages'] as $callback) {
                 $this->import($callback[0]);
-                $arrPages = $this->$callback[0]->$callback[1]($arrPages);
+                $arrPages = $this->{$callback[0]}->{$callback[1]}($arrPages);
             }
         }
 
